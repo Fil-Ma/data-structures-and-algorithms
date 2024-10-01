@@ -81,3 +81,15 @@ class LinkedList<T> {
     }
   }
 }
+
+const comparator = (first: number, second: number) => first === second;
+
+const myList = new LinkedList(comparator);
+
+myList.append(30);
+myList.append(20);
+myList.append(10);
+myList.append(40);
+myList.delete(10);
+
+myList.traverse();

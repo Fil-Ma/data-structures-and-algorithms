@@ -59,3 +59,12 @@ Types of Linked Lists
 | **Memory Overhead**          | Each node requires additional memory for storing the pointer, which can lead to increased memory usage compared to arrays.         |
 | **Sequential Access**        | Accessing an element by index requires traversing the list from the head, leading to an average time complexity of O(n) for access.|
 | **Cache Locality**           | They may not exhibit good cache performance because nodes are not store contiguously in memory.                                    |   
+
+### Stack
+
+A stack is a __LIFO (Last In, First Out)__ data structure, meaning that the most recently added item is the first to be removed. Typical operations associated with a stack are:
+- _push_: add an element to the top of the stack
+- _pop_: remove and return the top element of the stack
+- _peek_: return the top element without removing it
+- _isEmtpy_: check if the stack is empty
+- _size_: return the number of elements in the stack
