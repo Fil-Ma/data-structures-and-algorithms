@@ -3,7 +3,7 @@
 Data structures can be classified as either:
 
 - **Linear**
-- **Non-Linear**: data elements are randomly arranged. The elements are non-arranged sequentially and they can have multiple relationships. Examples include: trees, graphs, hash table, set. 
+- **Non-Linear** 
 
 ## Linear Structures
 
@@ -68,3 +68,115 @@ A stack is a __LIFO (Last In, First Out)__ data structure, meaning that the most
 - _peek_: return the top element without removing it
 - _isEmtpy_: check if the stack is empty
 - _size_: return the number of elements in the stack
+
+### Queue
+
+A queue is a __FIFO (First In, First Out)__ data structure, meaning the first element added to the queue is the first one to be removed. Common operations include:
+- _enqueue_: add an element to the end of the queue
+- _dequeue_: remove and return the element from the front of the queue
+- _peek_: return the element at the front without removing it
+- _isEmtpy_: check if the queue is empty
+- _size_: return the number of elements in the queue
+
+## Non-Linear Structures
+
+Non-linear data structures are types of data structures in which the elements are not arranged in a sequential or linear order. Unlike linear data structures, in non-linear data structures, each element can be connected to multiple elements forming a hierarchical or networked relationship.
+
+### Dictionary
+
+A dictionary is a data structure that stores key-value pairs. Each key is unique, and it can be used to retrieve the corresponding value. The common operations for a dictionary include:
+- _Search(D,k)_ - Given a search key _k_, return a pointer to the element in dictionary _D_ whose key value is _k_, if one exists.
+- _Insert(D,x)_ - Given a data item _x_, add it to the set in the dictionary _D_.
+- _Delete(D,x)_ - Given a pointer to a given data item _x_ in the dictionary _D_, remove it from _D_.
+
+### Tree
+
+A tree is a non-linear, hierarchical data structure made up of nodes, where each node contains a value (or data) and references to other nodes (its children). Trees are used to represent relationships where elements are organized in a hierarchy, with one central "root" and multiple levels of nodes branching off from it.
+
+Key concepts:
+- node: the basic building block of a tree. A node contains data and references to its child nodes. Each node may also have a parent.
+- edge: a connection between two nodes. It represents the relationship between a parent and a child node
+- parent node: a node that has one or more children
+- child node: a node that has a parent
+- siblings: nodes that share the same parent
+- subtree: a portion of tree that is itself a tree, consisting of a node and all its descendants
+- height of tree: the number of edges on the longest path from the root to a leaf node
+- depth of node: the number of edges from the root node to the node in question
+- level of node: the depth of a node plus one
+- binary tree: a special type of tree where each node has at most two children, usually referred to as the left child and the right child
+
+|**Types of Trees** | **Definition** | **Use cases** |
+|:-----------------------------|:-------|:-------|
+| Binary Tree | A tree where each node has at most two children | Binary trees are used in searching, sorting and hierarchical data storage |
+| Binary Search Tree (BST) | A binary tree in which every node follows this property: the value of all nodes in the left subtree of a node is smaller, and the value of all nodes in the right subtree is larger | Efficient searching and sorting |
+| AVL Tree | A self-balancing binary search tree. For every node, the difference in height between the left and right subtree is at most one | Balanced searching and insertion to avoid skewed trees, making the time complexity logarithmic |
+| Red-Black Tree | Another type of self-balancing binary search tree where each node is assigned a color (red or black) and follows certain balancing properties | used in associative containers, databases and memory management |
+| Heap (Binary Heap) | A complete binary tree where the value of each node is either greater (max heap) or smaller (min heap) than its children | Implementing priority queues, scheduling algorithms and heapsort |
+| B-Tree | A balanced tree where each node can have more than two children and is used for efficiently storing and retrieving large blocks of data | Used in databases and file systems, where data is read in blocks |
+| Trie | A tree where each node represents a single character, and strings are stored by branching from the root node | Implementing dictionaries, auto-complete functionality and IP routing |
+| N-ary Tree | A tree where each node can have at most N children | Representation of hierarchical data, such as organizational structures or file systems |
+
+Advantages:
+- _Efficient searching_: trees like Binary Search Trees (BSTs) allow efficient searching, insertion, and deletion, usually O(log n) time complexity
+- _Flexible data representation_: trees can represent hierarchical data like folder structures, organizational charts, and family trees
+- _Balanced structures_: trees like AVL and Red-Black trees automatically balance themeselves, ensuring efficient operations
+
+Disadvantages:
+- _Complexity in operations_: operations like insertion and deletion can be complex in trees like AVL or Red-Black trees due to the need for rebalancing
+- _Storage overhead_:trees require more storage due to pointers to child nodes, especially in binary trees and self-balancing trees
+
+Trees operations:
+1. Insertion: adding a new node to the tree, typically at a leaf node
+2. Deletion: removing a node from the tree while maintaining its structure
+3. Traversal: visiting all the nodes in the tree in a specific order
+
+In-Order Traversal (for BST)
+
+```
+function inOrderTraversal(node):
+    if node is not null:
+        inOrderTraversal(node.left)
+        print(node.data)
+        inOrderTraversal(node.right)
+```
+
+Pre-Order Traversal
+
+```
+function preOrderTraversal(node):
+    if node is not null:
+        print(node.data)
+        preOrderTraversal(node.left)
+        preOrderTraversal(node.right)
+```
+
+Post-Order Traversal
+
+```
+function preOrderTraversal(node):
+    if node is not null:
+        postOrderTraversal(node.left)
+        postOrderTraversal(node.right)
+        print(node.data)
+```
+
+Level-order Traversal (Breadth-First Search)
+
+```
+function BFS(tree, root):
+    # Create a queue and enqueue the root node
+    create an empty queue Q
+    enqueue root onto Q
+
+    # while the queue is not empty
+    while Q is not empty:
+        # Dequeue a node form the front of the queue
+        currentNode = dequeue from Q
+
+        # Process the current node (print or store the node)
+        print currentNode
+
+        # Enqueue all the children of the current node
+        for each child in currentNode.children:
+            enqueue child onto Q
+```
