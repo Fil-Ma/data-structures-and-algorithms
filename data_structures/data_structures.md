@@ -180,3 +180,37 @@ function BFS(tree, root):
         for each child in currentNode.children:
             enqueue child onto Q
 ```
+
+### Hash Table
+
+A hash table (also know as a __hash map__) is a data structure that provides fast insertion, deletion, and lookup of key-value pairs. It uses a __hash function__ to compute an index (also known as hash code) into an array, where the desired value can be stored or retrieved.
+
+Key concepts
+1. _Key-Value pairs_: hash tables store data as key-value pairs. The key is used to uniquely identify the value, and the value is the data associated with the key
+2. _Hash function_: a function that takes a key as input and returns an index where the key-value pair is stored in the array
+3. _Buckets_: a hash table internally uses an array where each index (or "bucket") holds key-value pairs. The index is determined by the hash function applied to the key
+4. _Collisions_: when two different hash keys hash to the same index, it's called a collision. Hash tables use collision resolution techniques to handle this
+
+**The Hash Function**
+
+The hash function is crucial to the efficiency of a hash table. A good hash function distributes keys uniformly across the array to minimize collisions.
+
+**Collision Resolution**
+
+Since multiple keys can produce the same hash index (a collision), hash tables must have a strategy for handling them. There are several collision resolution techniques:
+
+|**Technique** | **How it works** | **Advantage** | **Disadvantage** |
+|:-----------------------------|:-------|:-------|:-------|
+| Chaining | Each bucket in the hash table stores a linked list of key-value pairs. If multiple keys hash to the same bucket, they are stored in the linked list | Simple and easy to implement. The time complexity of operations remains proportional to the average number of elements per bucket | If many collision occur, linked lists can become long, degrading performance to O(n) in the worst case |
+| Open Addressing | Instead of storing multiple elements in the same bucket, open addressing tries to find another empty bucket in the array for the key-value pair |  Avoids the overhead of using extra memory for pointer and for the extra time for maintaining lists. It has simpler structure and better performance for small tables | Clustering can happen due to collisions, growing as more items are inserted. Requires frequent resizing (rehashing) when the table reaches a certain threshold | 
+
+Advantages of hash tables:
+- _Fast lookups_: on average, hash tables provide _O_(1) time complexity for insertions, deletions and lookups
+- _Flexible key types_: hash tables can store different types of keys (integers, strings, etc.) as long as a hash function is defined for the key type
+- _Efficient memory usage_: depending on the load factor (number of elements/size of table), hash tables use memory efficiently
+
+Disadvantages of hash tables:
+- _Collisions_: although hash tables are efficient, collisions can degrade performance, especially with a poorly designed hash function
+- _Unordered_: hash tables do not maintain any order of elements
+- _Resizing overhead_: if the table becomes too full (i.e. the load factor exceeds a certain threshold), resizing and rehashing can become costly operations
+- _Space_: open addressing methods, especially with probing, might require more space than necessary, leading to wasted memory
