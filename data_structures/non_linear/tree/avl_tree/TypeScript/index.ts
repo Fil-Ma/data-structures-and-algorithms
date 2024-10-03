@@ -21,14 +21,22 @@ function getHeight<T>(node: AVLTreeNode<T> | null): number {
 // get node balance
 function getBalance<T>(node: AVLTreeNode<T> | null): number {
   if (!node) return 0;
-  return this.getHeight(node.leftNode) - this.getHeight(node.rightNode);
+  return getHeight(node.leftNode) - getHeight(node.rightNode);
 }
 
 function getNewHeight<T>(node: AVLTreeNode<T>) {
   return Math.max(
-    this.getHeight(node.leftNode),
-    this.getHeight(node.rightNode)
+    getHeight(node.leftNode),
+    getHeight(node.rightNode)
   ) + 1;
+}
+
+function getMinValueNode<T>(node: AVLTreeNode<T>): AVLTreeNode<T> {
+  let current = node;
+  while (current.leftNode !== null) {
+      current = current.leftNode;
+  }
+  return current;
 }
 
 type TComp<T> = (a: T, b: T) => number;
@@ -72,6 +80,37 @@ class AVLTree<T> {
     return y;
   }
 
+  private balanceNode(node: AVLTreeNode<T>): AVLTreeNode<T> {
+    // check the balance factor to check if the tree is unbalanced
+    const balance = getBalance(node);
+
+    // Left heavy (balance > 1)
+    if (balance > 1) {
+      if (getBalance(node.leftNode) >= 0) {
+          // Left Left Case
+          return this.rightRotate(node);
+      } else {
+          // Left Right Case
+          node.leftNode = this.leftRotate(node.leftNode!);
+          return this.rightRotate(node);
+      }
+    }
+
+    // Right heavy (balance < -1)
+    if (balance < -1) {
+      if (getBalance(node.rightNode) <= 0) {
+          // Right Right Case
+          return this.leftRotate(node);
+      } else {
+          // Right Left Case
+          node.rightNode = this.rightRotate(node.rightNode!);
+          return this.leftRotate(node);
+      }
+    }
+
+    return node;
+  }
+
   private insertNode(node: AVLTreeNode<T> | null, data: T): AVLTreeNode<T> {
     if (!node) {
       return new AVLTreeNode(data);
@@ -88,36 +127,44 @@ class AVLTree<T> {
       return node;
     }
 
-    // update the height of the ancestor node
     node.height = getNewHeight(node);
-
-    // check the balance factor to check if the tree is unbalanced
-    const balance = getBalance(node);
-
-    
-    if (balance > 1 && data < node.leftNode!.data) {
-      return this.rightRotate(node);
+    return this.balanceNode(node);
+  }
+  private deleteNode(node: AVLTreeNode<T> | null, data: T): AVLTreeNode<T> | null {
+    if (!node) {
+      return node;
     }
 
-    if (balance < -1 && data > node.rightNode!.data) {
-      return this.leftRotate(node);
+    const comparison = this.comparator(data, node.data);
+
+    if (comparison === -1) {
+      node.leftNode = this.deleteNode(node.leftNode, data);
+    } else if (comparison === 1) {
+      node.rightNode = this.deleteNode(node.rightNode, data);
+    } else {
+      // node with only one child or no child
+      if (!node.leftNode) {
+        return node.rightNode;
+      } else if (!node.rightNode) {
+        return node.leftNode;
+      }
+
+      // node with two children
+      const temp = getMinValueNode(node.rightNode);
+      node.data = temp.data;
+      node.rightNode = this.deleteNode(node.rightNode, temp.data);
     }
 
-    if (balance > 1 && data > node.leftNode!.data) {
-      node.leftNode = this.leftRotate(node.leftNode!);
-      return this.rightRotate(node);
-    }
-
-    if (balance < -1 && data < node.rightNode!.data) {
-      node.rightNode = this.rightRotate(node.rightNode!);
-      return this.leftRotate(node);
-    }
-
-    return node;
+    node.height = getNewHeight(node);
+    return this.balanceNode(node);
   }
 
   insert(data: T): void {
     this.root = this.insertNode(this.root, data);
+  }
+
+  delete(data: T): void {
+    this.root = this.deleteNode(this.root, data);
   }
 }
 
@@ -127,11 +174,20 @@ const avl = new AVLTree((a: number, b: number) => {
   return 0;
 });
 
+avl.insert(9);
+avl.insert(5);
 avl.insert(10);
-avl.insert(20);
-avl.insert(30);
-avl.insert(40);
-avl.insert(50);
-avl.insert(25);
+avl.insert(0);
+avl.insert(6);
+avl.insert(11);
+avl.insert(-1);
+avl.insert(1);
+avl.insert(2);
 
+console.log("AVL Tree before deletion:");
+console.log(JSON.stringify(avl.root, null, 2));
+
+avl.delete(10);
+
+console.log("AVL Tree after deletion:");
 console.log(JSON.stringify(avl.root, null, 2));
