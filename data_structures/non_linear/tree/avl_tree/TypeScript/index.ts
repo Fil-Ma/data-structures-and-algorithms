@@ -12,6 +12,25 @@ class AVLTreeNode<T> {
   }
 }
 
+// get node height
+function getHeight<T>(node: AVLTreeNode<T> | null): number {
+  if (!node) return 0;
+  return node.height;
+}
+
+// get node balance
+function getBalance<T>(node: AVLTreeNode<T> | null): number {
+  if (!node) return 0;
+  return this.getHeight(node.leftNode) - this.getHeight(node.rightNode);
+}
+
+function getNewHeight<T>(node: AVLTreeNode<T>) {
+  return Math.max(
+    this.getHeight(node.leftNode),
+    this.getHeight(node.rightNode)
+  ) + 1;
+}
+
 type TComp<T> = (a: T, b: T) => number;
 
 class AVLTree<T> {
@@ -23,24 +42,7 @@ class AVLTree<T> {
     this.comparator = comparator;
   }
 
-  // get node height
-  private getHeight(node: AVLTreeNode<T> | null): number {
-    if (!node) return 0;
-    return node.height;
-  }
-
-  // get node balance
-  private getBalance(node: AVLTreeNode<T> | null): number {
-    if (!node) return 0;
-    return this.getHeight(node.leftNode) - this.getHeight(node.rightNode);
-  }
-
-  private getNewHeight(node: AVLTreeNode<T>) {
-    return Math.max(
-      this.getHeight(node.leftNode),
-      this.getHeight(node.rightNode)
-    ) + 1;
-  }
+  
 
   // right rotation for balancing
   private rightRotate(y: AVLTreeNode<T>): AVLTreeNode<T> {
@@ -50,8 +52,8 @@ class AVLTree<T> {
     x.rightNode = y;
     y.leftNode = T2;
 
-    y.height = this.getNewHeight(y);
-    x.height = this.getNewHeight(x);
+    y.height = getNewHeight(y);
+    x.height = getNewHeight(x);
 
     return x;
   }
@@ -64,8 +66,8 @@ class AVLTree<T> {
     y.leftNode = x;
     x.rightNode = T2;
 
-    x.height = this.getNewHeight(x);
-    y.height = this.getNewHeight(y);
+    x.height = getNewHeight(x);
+    y.height = getNewHeight(y);
 
     return y;
   }
@@ -87,14 +89,12 @@ class AVLTree<T> {
     }
 
     // update the height of the ancestor node
-    node.height = 1 + Math.max(
-      this.getHeight(node.leftNode),
-      this.getHeight(node.rightNode)
-    );
+    node.height = getNewHeight(node);
 
     // check the balance factor to check if the tree is unbalanced
-    const balance = this.getBalance(node);
+    const balance = getBalance(node);
 
+    
     if (balance > 1 && data < node.leftNode!.data) {
       return this.rightRotate(node);
     }
