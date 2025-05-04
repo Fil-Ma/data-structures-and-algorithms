@@ -376,3 +376,31 @@ Code splitting takes optimization a step further by intelligently breaking up la
 - route splitting: Common in single-page applications (SPAs), where code for a particular route is loaded only when the user navigates to that route.
 
 </details>
+
+### Question 29
+
+<details>
+<summary>Can you explain the difference between for...in and for...of loops in JavaScript? When would you use each, and what are the potential pitfalls of using them interchangeably?</summary>
+
+The for...in loop is used to iterate over the enumerable property keys of an object, including inherited properties if they are enumerable. It is best suited for iterating over object properties, not arrays, as it may return unexpected keys such as those added manually or from the prototype chain.
+
+The for...of loop, on the other hand, is used to iterate over iterable values, such as arrays, strings, Maps, Sets, and other iterable objects. It accesses the actual values rather than keys or indices and is generally preferred for array iteration due to its cleaner syntax and predictable behavior.
+
+Using for...in on arrays can lead to unexpected results, especially if the array has custom properties or if order matters. Therefore, for...in is ideal for objects, while for...of is more appropriate for arrays and other iterable collections.
+
+</details>
+
+### Question 30
+
+<details>
+<summary>What is a prototype in JavaScript, and how does prototypal inheritance work?</summary>
+
+In JavaScript, a prototype is an object that other objects can inherit properties and methods from. Every JavaScript object has an internal link ([[Prototype]]) to another object, which is its prototype. This forms a prototype chain, allowing properties and methods to be shared across objects.
+
+Prototypal inheritance means that an object can use properties and methods defined on its prototype, even if they are not defined directly on the object itself. This enables reuse and efficient memory usage, as shared behavior is stored in one place—the prototype.
+
+In modern JavaScript, objects can inherit from other objects via Object.create(), or more commonly through class syntax using the class and extends keywords, which under the hood still use prototypes.
+
+The chain continues up until it reaches Object.prototype, which is the root prototype; its prototype is null, marking the end of the chain.
+
+</details>
