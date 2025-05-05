@@ -6,9 +6,17 @@
 Var, let and const are all variables declarators. Var was available in javascript since the beginning, let and const instead were added
 with ES06 in 2015. The main differences are:
 
-1. **scope**: var allows to declare variables that are available everywhere in the global or function scope depending where it is declared. Let and const are instead bound to the current block scope.
-2. **hoisting**: all variables are hoisted in the sense that the declaration is moved at the top of the scope in the moment that the code is compiled but accessing a variable before the initialization can produce errors. To be specific accessing let and const variables before initialization produces a reference error since at this point the variables have yet no content (this is also defined as Temporal Dead Zone). Accessing a var variable before initialization will return undefined.
-3. **shadowing**: var variables can be re-declared in the same scope, and the new declaration will shadow the previous one. It can happen also with let and const if variables of the same name are declared inside a nested scope. In the last case it will be different since those variables will not be available in the scope outside but it is a common best practice to avoid using the same names.
+| Feature                        | `var`                                     | `let`                              | `const`                            |
+| ------------------------------ | ----------------------------------------- | ---------------------------------- | ---------------------------------- |
+| **Scope**                      | Function-scoped                           | Block-scoped                       | Block-scoped                       |
+| **Hoisting**                   | Yes, hoisted (initialized as `undefined`) | Yes, hoisted (but not initialized) | Yes, hoisted (but not initialized) |
+| **Re-declaration**             | Allowed in same scope                     | Not allowed in same scope          | Not allowed in same scope          |
+| **Re-assignment**              | Allowed                                   | Allowed                            | ❌ Not allowed                      |
+| **Initial value required?**    | No                                        | No                                 | ✅ Yes                              |
+| **Global binding on `window`** | Yes (in global scope)                     | No                                 | No                                 |
+
+
+**shadowing**: it happens when a variable declared within a certain scope (like a block or function) has the same name as a variable in an outer scope. The inner variable "shadows" the outer one, making it inaccessible within that inner scope.
 
 A feature of const variables is that they must be initialized at the moment they are declared and their value cannot change. There are special cases when it is possible to change the inner content of the variable and these cases are:
 
@@ -29,11 +37,11 @@ To avoid modifications of object and array declared with const keyword we can us
 
 The primitive types are the lowest available data type in javascript. They are:
 
-- number: the type of any number positive or negative included between the max safe integer representation. Special values of number are +Infinity, -Infinity, +0, -0, NaN
-- string: the type used to represent a sequence of single characters.
-- boolean: the type used to represent true/false data
+- number: represents both integers and floating point numbers included between the max safe integer representation. Special values of number are +Infinity, -Infinity, +0, -0, NaN
+- string: represents text data.
+- boolean: represents logical data (true, false)
 - bigint: this is an annotation that allows to represent and operate with number greater than the max safe integer representation.
-- symbol: a unique identifier usually used for the keys of objects.
+- symbol: A unique and immutable value often used as object keys to avoid name collisions
 - undefined: represents an absence of value, usually assigned by default for example to variables.
 - null: it usually represent an absence of a value. If we use the typeof operator on it we will get "object" as result.
 
@@ -44,11 +52,11 @@ The primitive types are the lowest available data type in javascript. They are:
 <details>
 <summary>Define the reference types in JavaSCript</summary>
 
-Reference types store memory addresses rather than values. They are:
+Reference types (also called non-primitive types) are data types that store references to memory locations, rather than actual values. Unlike primitives, these are mutable, and they include:
 
 - objects: data structures with attributes stored in pairs key/value
 - arrays: ordered collection of values
-- functions: a collable object
+- functions: a callable object
 - map: stores key/value pairs
 - set: stores collections of unique values
 
@@ -59,12 +67,9 @@ Reference types store memory addresses rather than values. They are:
 <details>
 <summary>What are template literals</summary>
 
-Template literals were introduced in ES06 and they allow to define strings of content with the use of the backtick. Advantages of this form are:
+Template literals are string literals that allow embedded expressions, multi-line strings, and improved readability. They were introduced in ES6 (ES2015).
 
-- they allow to define string on multiple lines
-- they allow to inject javascript by using the notation ${}
-
-This feature improves readability and minimizes the need for string concatenation.
+They are written using backticks (`) instead of quotes. This feature improves readability and minimizes the need for string concatenation.
 
 </details>
 
@@ -73,7 +78,16 @@ This feature improves readability and minimizes the need for string concatenatio
 <details>
 <summary>What is the difference between using primitive types and reference types</summary>
 
-Primitive types' variables simply store values, reference types instead store memory addresses. Copying variables may produce unpredictable result since copyed values will be the stored objects and not the strict values. In order to avoid wrong modification it is necessary to perform deep copies of values.
+| Feature                | **Primitive Types**                                                    | **Reference Types**                               |
+| ---------------------- | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| **Definition**         | Basic data types                                                       | Objects and complex structures                    |
+| **Stored in memory**   | As **values**                                                          | As **references** (memory addresses)              |
+| **Mutable?**           | ❌ Immutable (cannot be changed)                                        | ✅ Mutable (can be changed)                        |
+| **Copied by**          | **Value** — a copy of the actual value                                 | **Reference** — a pointer to the same object      |
+| **Comparison (`===`)** | Compared by **value**                                                  | Compared by **reference (identity)**              |
+| **Examples**           | `string`, `number`, `boolean`, `null`, `undefined`, `symbol`, `bigint` | `object`, `array`, `function`, `Map`, `Set`, etc. |
+
+In order to avoid wrong modification it is necessary to perform deep copies of values.
 
 Shallow copy
 
@@ -96,10 +110,6 @@ Deep copy
 <summary>Define all the signatures to declare a function. Illustrate the differences</summary>
 
 There are 3 possible ways to declare a function:
-
-- function declaration, in the form function myFunction() {}
-- function expressions, in the form const myFunction = function(){}
-- arrow functions, added in ES06
 
 | Characteristics         | **Function Declaration**                           | **Function Expression**                                       | **Arrow Function**                                                               |
 | ----------------------- | -------------------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------- |
@@ -158,7 +168,9 @@ Sets will treat reference types in a particular manner. To be specific:
 <details>
 <summary>What are closures</summary>
 
-Closures are a mechanism of JavaScript where a function is able to retain its lexical context even after execution. It is commonly used in functions returning other functions, although the outer function is executed once, the inner function will retain the lexical scope of the outer function even later.
+A closure is a function that retains access to its lexical scope, even when the function is executed outside that scope. In other words, closures allow a function to "remember" the environment in which it was created.
+
+When a function is created, it captures the local variables from its surrounding context. Even if the function is called outside of that context, it still has access to those captured variables.
 
 </details>
 
@@ -167,11 +179,11 @@ Closures are a mechanism of JavaScript where a function is able to retain its le
 <details>
 <summary>Define the call, apply and bind methods</summary>
 
-Call, apply and bind are all methods of functions:
+The call(), apply(), and bind() methods are all related to how functions are invoked and how they can manipulate the this context. Here's a detailed breakdown of each:
 
-- call allows to execute a function by passing a this context
-- apply does the same of call but it allows to pass an array for the arguments
-- bind allows to bind the function to a specific this. It returns a reference to another function that can be later used
+- The call() method allows you to invoke a function with a specified this value and individual arguments.
+- The apply() method is similar to call(), but instead of passing individual arguments, you pass them as an array (or an array-like object).
+- The bind() method returns a new function that, when called, has its this value set to the provided value and the initial arguments pre-set.
 
 </details>
 
@@ -180,7 +192,17 @@ Call, apply and bind are all methods of functions:
 <details>
 <summary>What are default and rest parameters</summary>
 
-The default parameter allows to assign a value to a parameter in the case that a value is not provided (i.e. the value is undefined). Rest parameters use the operator ... in order to group elements in an array or object.
+Default parameters and rest parameters are features introduced in ES6 (ES2015), and they both deal with function parameters, but they have different use cases. Here's a breakdown:
+
+- Default parameters allow you to specify default values for function parameters in case no arguments are passed (or undefined is passed) for those parameters.
+- Rest parameters allow you to represent an indefinite number of arguments as an array. They are useful when you want a function to handle any number of arguments passed to it.
+
+| Feature      | **Default Parameters**                                           | **Rest Parameters**                                      |
+| ------------ | ---------------------------------------------------------------- | -------------------------------------------------------- |
+| **Purpose**  | Set default values for missing arguments.                        | Collect multiple arguments into an array.                |
+| **Usage**    | Assigned to individual parameters.                               | Placed at the **end** of the parameter list.             |
+| **Syntax**   | `param = defaultValue`                                           | `...restParams`                                          |
+| **Use Case** | When you want to provide default values for optional parameters. | When you don’t know how many arguments you will receive. |
 
 </details>
 
@@ -189,7 +211,9 @@ The default parameter allows to assign a value to a parameter in the case that a
 <details>
 <summary>What is a IIFE</summary>
 
-IIFE stands for Immediately Invoked Function Execution and it refers to functions that are immediately executed after it is defined. They are presented with the notation (function() {})()
+An IIFE (pronounced "iffy") is a JavaScript function that is defined and executed immediately after its creation.
+
+It’s a function expression that is invoked (called) right away without needing to be called explicitly. IIFEs are often used for creating a local scope, to avoid polluting the global scope.
 
 </details>
 
@@ -198,7 +222,9 @@ IIFE stands for Immediately Invoked Function Execution and it refers to function
 <details>
 <summary>What is currying</summary>
 
-Currying is a technique that allows to partially execute functions by transforming them into a series of functions.
+Currying is a functional programming technique where a function that takes multiple arguments is transformed into a series of functions, each taking one argument. Instead of calling the function with all its arguments at once, you call it with one argument at a time, and each function returns another function that accepts the next argument until all arguments are provided.
+
+Currying essentially breaks down a function that takes multiple arguments into a series of functions that take one argument at a time.
 
 </details>
 
@@ -207,16 +233,24 @@ Currying is a technique that allows to partially execute functions by transformi
 <details>
 <summary>What is this</summary>
 
-This refers to the object that is executing a function. It can vary depending on the scope and how a function is called.
+In JavaScript, this refers to the context in which a function is called. It is a special keyword that allows you to access properties and methods of the object that owns the currently executing code. However, the value of this can change depending on how and where the function is called.
 
-- if the function is part of an object (e.g. method) this will represent the invoking object
-- if the function is a regular function it will represent the global object in non-strict mode (else is undefined)
-- when the function is used as a constructor with the new keywork, this is bound to the newly created object
+1. Global Context
+In the global execution context (outside any function or object), this refers to the global object.
+- In browsers, the global object is window.
+- In Node.js, the global object is global.
 
-Special cases:
+2. Object Method Context
+When a function is called as a method of an object, this refers to the object the function is a method of.
 
-- arrow functions don't have a this context, they get it from the surrounding lexical scope
-- in event handlers this refers to the target dom element
+3. Constructor Function Context (with new)
+When a function is used as a constructor (called with the new keyword), this refers to the newly created instance of the object.
+
+4. Explicitly Binding this with call(), apply(), and bind()
+You can explicitly bind the value of this using the call(), apply(), and bind() methods.
+
+5. Arrow Functions and this
+Arrow functions behave differently when it comes to this. They don’t have their own this; instead, they inherit this from the surrounding (lexical) context in which they were defined.
 
 </details>
 
@@ -225,7 +259,10 @@ Special cases:
 <details>
 <summary>What is the difference between == and ===</summary>
 
-They are both comparison operator. One is defined as loose equality comparator (==) and it is called so because it performs type coercion in order to evaluate the parameters. The other one is called strict equality comparator (===) and it returns true only if both operands have same type and same value.
+The difference between == and === lies in how they compare values:
+
+- == (Loose Equality / Abstract Equality): This operator compares values after performing type coercion (automatic conversion of values to a common type).
+- === (Strict Equality): This operator compares values without type coercion, meaning both the value and the type must be the same.
 
 </details>
 
@@ -234,9 +271,19 @@ They are both comparison operator. One is defined as loose equality comparator (
 <details>
 <summary>What is the event loop</summary>
 
-JavaScript is a single threaded programming language. In order to make it more performant and avoid that the ui will be blocked by the execution of code, the event loop is used. The event loop constantly check the call stack and the task queues in order to determine what to execute next.
+The Event Loop is a core concept in JavaScript that allows for asynchronous execution of code. It enables JavaScript to handle non-blocking operations (like I/O operations, timers, network requests) in a single-threaded environment. The event loop ensures that JavaScript remains responsive even when performing time-consuming tasks.
 
-The event loop first executes all the synchronous code on the call stack. When it is clear it then proceeds to the execution of tasks. After the last stack frame, the microtask queue is executed till completion. This queue considers operations such as promises. When the call stack is empty and there are no microtasks to execute, the event loop executes macrotasks. Since macrotasks can generate microtasks, they are executed only one per cycle so that microtasks can have the priority. Macrotasks include intervals, timeouts and ui events.
+In simple terms, the Event Loop is responsible for executing code, handling events, and processing messages in the event queue.
+
+- Call Stack: This is where JavaScript keeps track of what functions are currently running. It is a stack data structure, meaning the most recently called function is always executed first.
+- Callback Queue (Event Queue): This is where asynchronous tasks (like setTimeout, I/O operations, etc.) are placed after they are completed. These tasks are waiting to be executed.
+- Web APIs (in browsers): These are provided by the browser (or Node.js) and allow asynchronous operations like HTTP requests (fetch, XMLHttpRequest), timers (setTimeout, setInterval), and DOM events (click, keypress, etc.).
+- Event Loop: The Event Loop monitors the Call Stack and the Callback Queue. It takes functions from the Callback Queue and pushes them to the Call Stack when the Call Stack is empty.
+
+The Event Loop enables JavaScript to handle asynchronous code efficiently. Here's how it works with more complex asynchronous tasks:
+
+- Promises: When a promise resolves or rejects, its then (or catch) callback is added to the Callback Queue. The Event Loop will then pick it up once the Call Stack is empty.
+- Microtasks: Promises have a higher priority than regular tasks in the Callback Queue. They are added to the Microtask Queue, and the Event Loop processes the Microtask Queue before moving to the regular Callback Queue.
 
 </details>
 
@@ -245,7 +292,11 @@ The event loop first executes all the synchronous code on the call stack. When i
 <details>
 <summary>What is a callback</summary>
 
-A callback is a function that is passed as parameter and that can be executed at a later time.
+A callback is a function that is passed as an argument to another function and is intended to be executed later, once a certain event or task has been completed. This is a fundamental concept in JavaScript, especially for handling asynchronous operations like timers, events, and server responses.
+
+Callbacks are a way to extend the behavior of a function, allowing you to run a specific piece of code at the appropriate time.
+
+When callbacks are nested within each other, especially in asynchronous operations, it can lead to a phenomenon called Callback Hell (or Pyramid of Doom), where the code becomes difficult to read and maintain.
 
 </details>
 
@@ -254,27 +305,50 @@ A callback is a function that is passed as parameter and that can be executed at
 <details>
 <summary>What are promises</summary>
 
-Promises are a special type of object that was introduced to improve code readability and maintainance since the misuse of callbacks can introduce callback hell. Promises have a status that can be:
+A Promise in JavaScript is an object representing the eventual completion (or failure) of an asynchronous operation and its resulting value. It allows you to handle asynchronous operations more effectively by avoiding the pitfalls of callback hell (nested callbacks).
 
-- pending - not yet resolved
-- fulfilled - resolved successfully
-- rejected - failed
+A Promise is like a contract in which you make a promise to do something, and when that thing is done, you either fulfill or reject the promise based on whether the task was successful or failed.
 
-Promises are chainable, they have methods that can chain the result into another asynchronous operation.
+A Promise can be in one of three states:
+
+1. Pending: The initial state, where the asynchronous operation is still ongoing and the Promise hasn't been resolved or rejected yet.
+2. Fulfilled: The asynchronous operation has completed successfully, and the Promise is resolved with a result (the value returned).
+3. Rejected: The asynchronous operation has failed, and the Promise is rejected with an error (the reason for the failure).
+
+Once a Promise is created, you can use the .then() and .catch() methods to handle its result:
+
+- .then(onFulfilled, onRejected): This method is called when the Promise is either fulfilled or rejected. It allows you to handle both successful outcomes (via onFulfilled) and errors (via onRejected).
+- .catch(onRejected): This method is a shortcut to handle errors (rejections) of a Promise.
 
 </details>
 
 ### Question 19
 
 <details>
-<summary>How can we achive concurrency</summary>
+<summary>How can we achieve concurrency</summary>
 
-Javascript offers different methods to apply concurrency, mainly with some promise's static methods:
+JavaScript is single-threaded (it has one call stack), but it can handle concurrent operations using asynchronous programming techniques. Concurrency allows multiple tasks to be in progress at the same time, even if they don’t actually run at the same instant on separate threads.
 
-- Promise.all - it resolves when all promises fulfill
-- Promise.allSettled - it resolves when all promises settle
-- Promise.any - it resolves when any of the promises fulfills
-- Promise.race - it resolves when any of the promises settles
+In JavaScript, concurrency is achieved primarily through:
+
+1. Asynchronous APIs + Event Loop
+JavaScript can perform I/O operations (like network requests, file reads, timers) without blocking the main thread using non-blocking asynchronous APIs, and the event loop ensures the results are handled later.
+
+2. Promises
+You can run multiple Promises concurrently by not awaiting them immediately
+
+3. Promise.all / Promise.allSettled / Promise.race
+- Promise.all() runs Promises in parallel and waits for all to resolve.
+- Promise.allSettled() waits for all to finish, regardless of success or failure.
+- Promise.race() resolves or rejects as soon as any Promise settles.
+
+These methods allow concurrent execution and are key tools for managing multiple asynchronous tasks efficiently.
+
+4. async/await with Concurrent Execution
+To achieve actual concurrency with async/await, start all tasks first, then await them.
+
+5. Web Workers (for true parallelism)
+JavaScript can’t normally use multiple threads, but Web Workers allow running code in separate background threads (mostly in the browser).
 
 </details>
 
@@ -283,9 +357,21 @@ Javascript offers different methods to apply concurrency, mainly with some promi
 <details>
 <summary>What is async await</summary>
 
-Async/await was introduced in ES08 and it further simplifies the use of asynchronicity. Async allows to transform any function into a promise. Await allows to wait that a promise will be fulfilled.
+async/await is syntactic sugar built on top of Promises that allows you to write asynchronous code in a clean, readable, and synchronous-looking style.
 
-The use of try {} catch allows to determine how the application will behave in the case that an error will occurr or in the case that a promise will reject.
+It makes working with asynchronous operations much easier, avoiding deeply nested .then() chains and improving code readability and maintainability.
+
+async Keyword
+- Declares an asynchronous function.
+- Always returns a Promise, even if you return a value directly.
+- Inside an async function, you can use await.
+
+await Keyword
+- Can only be used inside async functions.
+- Pauses the execution of the async function until the awaited Promise resolves or rejects.
+- Returns the resolved value or throws the rejected error.
+
+You can handle errors from awaited Promises using try...catch, similar to synchronous error handling.
 
 </details>
 
@@ -294,11 +380,15 @@ The use of try {} catch allows to determine how the application will behave in t
 <details>
 <summary>Explain the process of how ui events are executed</summary>
 
-The execution of events in Javascript involves 3 phases:
+When an event occurs, it doesn’t just target one element—it may propagate:
 
-- capturing: the event travels from the root to the target element
-- target
-- bubbling: the event is then propagated to all parent elements
+- Capturing phase: Event moves from the root down to the target.
+- Target phase: Event reaches the actual target element.
+- Bubbling phase: Event bubbles back up from the target to the root.
+
+You can control propagation using:
+- event.stopPropagation() to stop bubbling or capturing
+- { capture: true } in addEventListener() for capture phase
 
 </details>
 
@@ -307,7 +397,8 @@ The execution of events in Javascript involves 3 phases:
 <details>
 <summary>How can we stop event propagation in the bubbling phase</summary>
 
-We can stop the propagation by using the stopPropagation method that will stop the event from bubbling to its ancestor. There are cases when a target may have multiple event listeners that may be propagated in the case that the same ui event happens; in this case we can use stopimmediatepropagation to stop any other listener attached to the target.
+- event.stopPropagation(): You can stop event propagation during the bubbling phase by using the method
+- event.stopImmediatePropagation(): Stops other listeners of the same event on the same element from executing, in addition to stopping bubbling.
 
 </details>
 
@@ -316,7 +407,12 @@ We can stop the propagation by using the stopPropagation method that will stop t
 <details>
 <summary>What is event delegation</summary>
 
-With the knowledge of what event bubbling is, we can optimize the execution of event listeners by delegating the listener to an ancerstor. This way we don't have to attach the same listener to multiple elements.
+Event delegation is a technique in JavaScript where you attach a single event listener to a parent element, and handle events that bubble up from its child elements. Instead of attaching individual listeners to many child elements, the parent listens for events and uses logic to act only when specific child elements trigger the event.
+
+Why Use Event Delegation?
+- Improves performance (fewer event listeners)
+- Handles dynamic elements (new child elements added later)
+- Simplifies code maintenance
 
 </details>
 
@@ -325,7 +421,16 @@ With the knowledge of what event bubbling is, we can optimize the execution of e
 <details>
 <summary>What is the difference between the event target and the event currentTarget</summary>
 
-The target is the element that triggered the event (typically the element the user interacted with). The current target instead is the element to which the event listener is currently attached. This is useful in event delegation.
+Both event.target and event.currentTarget are properties on an event object in JavaScript, but they refer to different elements during event handling:
+
+event.target
+- Refers to the actual element that triggered the event.
+- It's where the event originated.
+- Stays the same during bubbling or capturing.
+
+event.currentTarget
+- Refers to the element that the event listener is attached to.
+- It can be different from event.target when using event delegation or bubbling
 
 </details>
 
@@ -334,10 +439,13 @@ The target is the element that triggered the event (typically the element the us
 <details>
 <summary>Explain debouncing and throttling</summary>
 
-They are both techniques that allows us to optimize code execution in particular in the case of excessive execution of functions and events.
+Both debouncing and throttling are techniques used to control how often a function is executed, especially in response to high-frequency events like scroll, resize, input, or keydown.
 
-- Debouncing is a technique that allows to execute a function only after an idle timespan is passed. Basically it waits for an interval from the last function call.
-- Throttling is a technique that allows to execute a function only once in a specific timespan. Basically the function is executed once and all function call that happen before the timeout expiration will be cancelled.
+Debouncing
+Debouncing ensures a function is only called after a certain delay has passed since the last time it was invoked.
+
+Throttling
+Throttling ensures a function is only called at most once every X milliseconds, no matter how often the event occurs.
 
 </details>
 
@@ -346,7 +454,27 @@ They are both techniques that allows us to optimize code execution in particular
 <details>
 <summary>What are minification and bundling</summary>
 
-Minification and bundling are optimization techniques used to decrease the size of files required to run the application. To be specific minification is the process that involves the removal of unused content like comments, spaces, and in certain cases to simplify variable names. Bundling is the process of joining content or code in a same file in order to decrease overhead on the number of requests performed to obtain the working application.
+Minification and bundling are build optimization techniques used in front-end development to improve performance and reduce load times in production environments.
+
+**Minification**
+Minification is the process of removing all unnecessary characters from source code without changing its functionality.
+
+Purpose:
+- Reduce file size → faster download and parsing by the browser
+
+What gets removed:
+- Whitespace
+- Comments
+- Newlines
+- Shortens variable and function names (e.g., totalAmount → a)
+
+**Bundling**
+Bundling is the process of combining multiple JavaScript (or CSS, etc.) files into one or a few files.
+
+Purpose:
+- Reduce number of HTTP requests
+- Manage module dependencies (import/export)
+- Optimize delivery of assets
 
 </details>
 
@@ -355,11 +483,13 @@ Minification and bundling are optimization techniques used to decrease the size 
 <details>
 <summary>What is lazy loading</summary>
 
-Lazy loading is a technique that allows to load content on demand, only when required. This improves the overall application, since instead that downloading everything we can just load the required content first. Lazy loading can be applied to:
+Lazy loading is a performance optimization technique where certain resources (like images, components, or scripts) are loaded only when needed, rather than upfront when the page loads.
 
-- media (e.g. images)
-- javascript modules
-- third party resources (e.g. analytics)
+| Feature        | Eager Loading                            | Lazy Loading                          |
+| -------------- | ---------------------------------------- | ------------------------------------- |
+| When it loads  | Immediately during page load             | On demand or when needed              |
+| Initial speed  | Slower due to loading everything upfront | Faster due to reduced initial payload |
+| Resource usage | Higher                                   | Lower and more efficient              |
 
 </details>
 
@@ -368,12 +498,16 @@ Lazy loading is a technique that allows to load content on demand, only when req
 <details>
 <summary>What is code splitting</summary>
 
-Code splitting takes optimization a step further by intelligently breaking up large JavaScript bundles into smaller, manageable chunks. Rather than forcing users to download an entire application at once, code splitting ensures they only download what’s necessary at any given moment.
+Code splitting is a performance optimization technique that involves breaking your JavaScript bundle into smaller, separate chunks that can be loaded on demand, rather than as a single large file.
 
-- entry point splitting: Splits the code based on different entry points of the application
-- vendor splitting: Separates third-party libraries
-- dynamic imports: Uses dynamic import() statements to load code on-demand
-- route splitting: Common in single-page applications (SPAs), where code for a particular route is loaded only when the user navigates to that route.
+1. Entry Point Splitting
+Multiple entry points are defined in your bundler config (e.g., Webpack). Useful in multi-page apps.
+
+2. Dynamic import()
+Code is split at runtime and loaded only when needed.
+
+3. Route-based Splitting (e.g., React Router)
+Load route components only when navigating to them.
 
 </details>
 
@@ -402,5 +536,23 @@ Prototypal inheritance means that an object can use properties and methods defin
 In modern JavaScript, objects can inherit from other objects via Object.create(), or more commonly through class syntax using the class and extends keywords, which under the hood still use prototypes.
 
 The chain continues up until it reaches Object.prototype, which is the root prototype; its prototype is null, marking the end of the chain.
+
+</details>
+
+### Question 31
+
+<details>
+<summary>What are the differences between sessionStorage, localStorage, and cookies in JavaScript?</summary>
+
+JavaScript provides three primary ways to store data on the client side: sessionStorage, localStorage, and cookies. They all have different behaviors and use cases:
+
+| Feature         | `sessionStorage`                                           | `localStorage`                             | Cookies                                                    |
+| --------------- | ---------------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
+| **Persistence** | Only for the duration of the session (until tab is closed) | Persistent until manually deleted          | Until expiration or manually deleted                       |
+| **Capacity**    | Around 5MB                                                 | Around 5MB                                 | 4KB per cookie                                             |
+| **Access**      | Only accessible in the current tab                         | Accessible across tabs and windows         | Sent with every HTTP request                               |
+| **Security**    | No security flags                                          | No security flags                          | Can be secured using `Secure` and `HttpOnly` flags         |
+| **Use Case**    | Temporary data storage (e.g., form data)                   | Long-term data storage (e.g., preferences) | Small data or server-side communication (e.g., session ID) |
+
 
 </details>
